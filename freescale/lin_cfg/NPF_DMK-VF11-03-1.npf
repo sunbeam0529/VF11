@@ -1,0 +1,31 @@
+/*** GENERAL DEFINITION ***/
+LIN_node_config_file;
+
+/*** MCU DEFINITION ***/
+mcu {
+   mcu_name                      = MC9S12ZVL32;
+   bus_clock                     = 8000000;                  /* Frequency bus of system Hz*/
+   xgate_support                 = no;                       /* Support XGATE Co-Processor */
+}
+
+/*** LIN HARDWARE DEFINITION ***/
+/* Sci config */
+sci {
+   S12_sci0{
+      sci_channel                = 0;
+   }
+}
+
+/*** NETWORK DEFINITION ***/
+network {
+   idle_timeout                  = 4 s;
+   diagnostic_class              = 3;
+   resynchronization_support     = no;
+   autobaud_support              = no;
+   LI0 {
+      node                       = REAR_CCU;                 /* Name of node described in LDF (must check consistence with LDF) */
+      file                       = "LDF_DMK-VF11-03.ldf";    /* Name of LDF file */
+      device                     = S12_sci0;
+   }
+}
+

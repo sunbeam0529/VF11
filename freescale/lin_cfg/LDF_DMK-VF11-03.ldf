@@ -1,0 +1,115 @@
+/*---------GLOBAL DEFINITIONS-----------*/
+LIN_description_file;
+LIN_protocol_version             = "2.1";
+LIN_language_version             = "2.1";
+LIN_speed                        = 19.2 kbps;
+/* ----------NODE DEFINITIONS---------- */
+Nodes {
+   Master:
+      FRONT_AC,                                              /* Master node name */
+      5.0 ms,                                                /* Time base */
+      0.1 ms;                                                /* Jitter */
+   Slaves:
+      REAR_CCU;
+}
+/* ----------SIGNAL DEFINITIONS---------- */
+Signals {
+   /* Signal_name                : Size,       Init,            Publisher, Subscriber(s) */
+   L_AC_BlowerLevel              :  4,        0x0,             FRONT_AC, REAR_CCU;
+   L_AC_Control_Lock_Req         :  2,        0x0,             FRONT_AC, REAR_CCU;
+   L_AC_OnOff_Req                :  2,        0x0,             FRONT_AC, REAR_CCU;
+   L_RCP_OverVoltage             :  1,        0x0,             REAR_CCU, FRONT_AC;
+   L_RCP_UnderVoltage            :  1,        0x0,             REAR_CCU, FRONT_AC;
+   L_RCP_Blower_Speed            :  4,        0x0,             REAR_CCU, FRONT_AC;
+   L_RCP_Lock_Status             :  1,        0x0,             REAR_CCU, FRONT_AC;
+   L_RCP_Blower_Err              :  1,        0x0,             REAR_CCU, FRONT_AC;
+   L_RCP_Error                   :  1,        0x0,             REAR_CCU, FRONT_AC;
+}
+/* ----------DIAGNOSTIC SIGNAL DEFINITIONS---------- */
+Diagnostic_signals {
+   /* MasterReq Reserved Signals */
+   MasterReqB0         :    8,   0;
+   MasterReqB1         :    8,   0;
+   MasterReqB2         :    8,   0;
+   MasterReqB3         :    8,   0;
+   MasterReqB4         :    8,   0;
+   MasterReqB5         :    8,   0;
+   MasterReqB6         :    8,   0;
+   MasterReqB7         :    8,   0;
+   /* SlaveResp Reserved Signals */
+   SlaveRespB0         :    8,   0;
+   SlaveRespB1         :    8,   0;
+   SlaveRespB2         :    8,   0;
+   SlaveRespB3         :    8,   0;
+   SlaveRespB4         :    8,   0;
+   SlaveRespB5         :    8,   0;
+   SlaveRespB6         :    8,   0;
+   SlaveRespB7         :    8,   0;
+}
+/* ----------UNCONDITIONAL FRAME DEFINITIONS---------- */
+Frames {
+   AC_1                :  0x1, FRONT_AC            ,    8 {
+      L_AC_Control_Lock_Req, 44;
+      L_AC_OnOff_Req      , 46;
+   }
+   RCP_1               :  0x2, REAR_CCU            ,    8 {
+      L_RCP_Error         , 46;
+      L_RCP_Blower_Err    , 47;
+      L_RCP_OverVoltage   , 48;
+      L_RCP_UnderVoltage  , 49;
+      L_RCP_Blower_Speed  , 50;
+      L_RCP_Lock_Status   , 54;
+   }
+}
+/* ----------DIAGNOSTIC FRAME DEFINITIONS---------- */
+Diagnostic_frames {
+   MasterReq           : 0x3c {
+      MasterReqB0         , 0;
+      MasterReqB1         , 8;
+      MasterReqB2         , 16;
+      MasterReqB3         , 24;
+      MasterReqB4         , 32;
+      MasterReqB5         , 40;
+      MasterReqB6         , 48;
+      MasterReqB7         , 56;
+   }
+   SlaveResp           : 0x3d {
+      SlaveRespB0         , 0;
+      SlaveRespB1         , 8;
+      SlaveRespB2         , 16;
+      SlaveRespB3         , 24;
+      SlaveRespB4         , 32;
+      SlaveRespB5         , 40;
+      SlaveRespB6         , 48;
+      SlaveRespB7         , 56;
+   }
+}
+/* ----------NODE ATTRIBUTE DEFINITIONS---------- */
+Node_attributes {
+   REAR_CCU {
+      LIN_protocol               = "2.1";                    /* Node protocol version */
+      configured_NAD             = 0x21;                     /* configured NAD of node (1-125) */
+      product_id                 =    0xb,    0x0,   0xff;   /* Product id */
+      response_error             = L_RCP_Error;              /* Response error signal */
+      P2_min                     = 50 ms;                    /* P2_min */
+      ST_min                     = 10 ms;                    /* ST_min */
+      configurable_frames {
+         AC_1;
+         RCP_1;
+      }
+   }
+}
+/* ----------SCHEDULE TABLE DEFINITIONS---------- */
+Schedule_tables {
+   Dynamic {
+      AC_1                                delay 100.0 ms;
+      RCP_1                               delay 10.0 ms;
+   }
+   Diagnose {
+      SlaveResp                           delay 10.0 ms;
+      AC_1                                delay 10.0 ms;
+      RCP_1                               delay 10.0 ms;
+      FreeFormat {0, 0, 0, 0, 0, 0, 0, 0} delay 30.0 ms;
+   }
+}
+

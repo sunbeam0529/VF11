@@ -1,0 +1,41 @@
+-nostdinc
+-nosyspath
+-i
+"$(ProjDirPath)/Project_Headers"
+-i
+"$(ProjDirPath)/LIN_Stack/bsp/AUTOBAUD"
+-i
+"$(ProjDirPath)/Sources"
+-i
+"$(ProjDirPath)/LIN_Stack/bsp/SCI"
+-i
+"$(ProjDirPath)/LIN_Stack/lowlevel"
+-i
+"$(ProjDirPath)/lin_cfg"
+-i
+"$(ProjDirPath)/LIN_Stack/include"
+-i
+"$(ProjDirPath)/LIN_Stack/diagnostic"
+-I-
+-I"$(MCUToolsBaseDirEnv)/S12lisa_Support/s12lisac/include"
+-I-
+-I"$(MCUToolsBaseDirEnv)/S12lisa_Support/s12lisac/src"
+-I-
+-I"$(MCUToolsBaseDirEnv)/S12lisa_Support/s12lisac/lib_small"
+-w illpragmas
+-w possible
+-w extended
+-w extracomma
+-w emptydecl
+-w structclass
+-w notinlined
+-model small
+-bfield_lsbit_first
+-bfield_reduce_type
+-opt level=0
+-opt space
+-requireprotos
+-Cpp_Exceptions off
+-char unsigned
+-msgstyle parseable
+-sym full
